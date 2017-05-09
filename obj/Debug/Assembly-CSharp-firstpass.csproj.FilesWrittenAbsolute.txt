@@ -1,0 +1,17 @@
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Assembly-CSharp-firstpass.dll.mdb
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Assembly-CSharp-firstpass.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/obj/Debug/Assembly-CSharp-firstpass.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/obj/Debug/Assembly-CSharp-firstpass.dll.mdb
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/UnityEngine.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/UnityEditor.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/UnityEngine.Networking.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/UnityEngine.UI.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Mono.Cecil.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Unity.SerializationLogic.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Unity.DataContract.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/ICSharpCode.NRefactory.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Unity.UNetWeaver.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Unity.UNetWeaver.dll.mdb
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Unity.CecilTools.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Mono.Cecil.Pdb.dll
+/Users/Afaci/Documents/FHMaster/gravito/gravito/Temp/bin/Debug/Mono.Cecil.Mdb.dll

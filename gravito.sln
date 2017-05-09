@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{4F18F197-3F8F-CE60-34F4-9691BD9B6718}") = "gravito", "Assembly-CSharp-firstpass.csproj", "{350799F3-95F6-327C-176D-9E53384C6BE4}"
+EndProject
+Project("{4F18F197-3F8F-CE60-34F4-9691BD9B6718}") = "gravito", "Assembly-CSharp.csproj", "{0EDA5601-B205-A9DB-86CB-F9111AD3A8E7}"
+EndProject
+Project("{4F18F197-3F8F-CE60-34F4-9691BD9B6718}") = "gravito", "Assembly-CSharp-Editor.csproj", "{21FD11F8-A1E9-EFF1-D44C-11A14C474829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{350799F3-95F6-327C-176D-9E53384C6BE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{350799F3-95F6-327C-176D-9E53384C6BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{350799F3-95F6-327C-176D-9E53384C6BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{350799F3-95F6-327C-176D-9E53384C6BE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDA5601-B205-A9DB-86CB-F9111AD3A8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDA5601-B205-A9DB-86CB-F9111AD3A8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDA5601-B205-A9DB-86CB-F9111AD3A8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDA5601-B205-A9DB-86CB-F9111AD3A8E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FD11F8-A1E9-EFF1-D44C-11A14C474829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FD11F8-A1E9-EFF1-D44C-11A14C474829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FD11F8-A1E9-EFF1-D44C-11A14C474829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FD11F8-A1E9-EFF1-D44C-11A14C474829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
