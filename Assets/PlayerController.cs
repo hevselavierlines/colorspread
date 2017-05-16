@@ -27,16 +27,45 @@ public class PlayerController : MonoBehaviour {
 	private int deadCounter = 0;
 	private string currentWorld = "Level1";
 	public int currentLevel = 1;
-	private short jumpers = 99;
-	private short shrinkers = 99;
+
+	private short jumpers = 0;
+	private short shrinkers = 0;
+	private short invisibility = 0;
+
 	private int selectionMode = 2;
 	public Text jumpText;
 	public Image jumpIcon;
 	public Text shrinkText;
 	public Image shrinkIcon;
 	private bool crouch = false;
+	public GameObject underWaterGui;
+	public GameObject pickedRedGui;
+	public GameObject pickedGreenGui;
+	public GameObject pickedBlueGui;
+	public GameObject pickedColourGui;
+	private bool firstTimeSelection = true;
 
 	void changeSelection() {
+		/*
+		// checks if colour change make sense
+		int amountDifferentColours = 0;
+		if (jumpers > 0)
+			amountDifferentColours++;
+		if (shrinkers > 0)
+			amountDifferentColours++;
+		if (invisibility > 0)
+			amountDifferentColours++;
+		if (amountDifferentColours < 2)
+			return;
+		*/
+		// surpresses the showed picked colour when you start the game
+		if (!firstTimeSelection) {
+			showColourPick (selectionMode);
+			Invoke ("hideColourPick", 1);
+		} else {
+			firstTimeSelection = false;
+		}
+
 		if (selectionMode == 1) {
 			selectionMode = 2;
 
@@ -107,6 +136,7 @@ public class PlayerController : MonoBehaviour {
 
 		float horizontalMovement = Input.GetAxis ("Horizontal") * movementSpeed;
 		float verticalMovement = Input.GetAxis ("Vertical") * movementSpeed;
+		float reset = Input.GetAxis ("Reset");
 
 		if (grounded) {
 			fallSpeed = 0;
@@ -122,15 +152,23 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (transform.position.y < 0) {
+			underWaterGui.SetActive(true);
 			deadCounter++;
 			if (deadCounter > 120) {
 				deadCounter = 0;
 				resetPlayer ();
 				resetTiles ();
+				underWaterGui.SetActive(false);
 			}
 		}
 
-
+		// Resets the player when he press the key "r"
+		if (reset == 1f) {
+			resetPlayer();
+			resetTiles();
+			underWaterGui.SetActive(false);
+		}
+			
 		CollisionFlags flags;
 		Vector3 motion = new Vector3 (horizontalMovement, fallSpeed, verticalMovement);
 
@@ -256,5 +294,49 @@ public class PlayerController : MonoBehaviour {
 				crouch = false;
 			}
 		}
+	}
+
+	/// <summary>
+	/// Shows the colour pick.
+	/// </summary>
+	/// <param name="colour">Red 1 Green 2 Blue 3 None 0</param>
+	void showColourPick(int colour) {
+		pickedRedGui.SetActive(false);
+		pickedGreenGui.SetActive(false);
+		pickedBlueGui.SetActive(false);
+
+		switch (colour) {
+		case 1:
+			pickedGreenGui.SetActive(true);
+			pickedColourGui.GetComponent<Image> ().color = new Color (0, 255, 0, 255);
+			break;
+		case 2:
+			pickedRedGui.SetActive(true);
+			pickedColourGui.GetComponent<Image> ().color = new Color (255, 0, 0, 255);
+			break;
+		case 3:
+			pickedBlueGui.SetActive(true);
+			pickedColourGui.GetComponent<Image> ().color = new Color (0, 0, 255, 255);
+			break;
+		default:
+			break;
+		}
+	}
+
+	/// <summary>
+	/// Hides the colour pick.
+	/// </summary>
+	void hideColourPick() {
+		showColourPick (0);
+	}
+
+	public void addRedLoad(int amount) {
+		jumpers += (short)amount;
+		jumpText.text = jumpers + "";
+	}
+
+	public void addGreenLoad(int amount) {
+		shrinkers += (short)amount;
+		shrinkText.text = shrinkers + "";
 	}
 }
