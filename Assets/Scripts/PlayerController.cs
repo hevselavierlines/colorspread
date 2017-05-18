@@ -42,8 +42,16 @@ public class PlayerController : MonoBehaviour {
 	public GameObject pickedRedGui;
 	public GameObject pickedGreenGui;
 	public GameObject pickedBlueGui;
-	public GameObject pickedColourGui;
+	public GameObject pointerRed;
+	public GameObject pointerGreen;
+	public GameObject pointerBlue;
 	private bool firstTimeSelection = true;
+
+	// faded shrinking
+	private float scaleFactorStanding = 5.0f;
+	private float scaleFactorCrouch = 1.0f;
+	private float scaleTime = 2.0f;
+	private float scaleTimeSteps = 0.03f;
 
 	void changeSelection() {
 		/*
@@ -70,7 +78,7 @@ public class PlayerController : MonoBehaviour {
 			selectionMode = 2;
 
 			Color color = jumpIcon.color;
-			color.a = 0.5f;
+			color.a = 0.2f;
 			jumpIcon.color = color;
 
 			color = shrinkIcon.color;
@@ -84,7 +92,7 @@ public class PlayerController : MonoBehaviour {
 			jumpIcon.color = color;
 
 			color = shrinkIcon.color;
-			color.a = 0.5f;
+			color.a = 0.2f;
 			shrinkIcon.color = color;
 		}
 
@@ -159,7 +167,7 @@ public class PlayerController : MonoBehaviour {
 		if (transform.position.y < 0) {
 			underWaterGui.SetActive(true);
 			deadCounter++;
-			if (deadCounter > 120) {
+			if (deadCounter > 20) {
 				deadCounter = 0;
 				die ();
 			}
@@ -266,10 +274,15 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyUp ("backspace")) {
 			resetPlayer ();
 		}
+		// Fade from original size to greeen colour size and vice versa
 		if (crouch) {
-			transform.localScale = new Vector3(0,2.0f,0);
+			// check if already fully crouched
+			if(transform.localScale.y <= scaleFactorCrouch) return;
+			InvokeRepeating ("fadeCrouch", 0.0f, scaleTimeSteps);
 		} else {
-			transform.localScale = new Vector3(0,4.0f,0);
+			// check if already full height
+			if(transform.localScale.y >= scaleFactorStanding) return;
+			InvokeRepeating ("fadeStanding", 0.0f, scaleTimeSteps);
 		}
 
 	}
@@ -306,18 +319,24 @@ public class PlayerController : MonoBehaviour {
 		pickedGreenGui.SetActive(false);
 		pickedBlueGui.SetActive(false);
 
+		if (colour != 0) {
+			pointerRed.SetActive (false);
+			pointerGreen.SetActive (false);
+			pointerBlue.SetActive (false);
+		}
+
 		switch (colour) {
 		case 1:
 			pickedGreenGui.SetActive(true);
-			pickedColourGui.GetComponent<Image> ().color = new Color (0, 255, 0, 255);
+			pointerGreen.SetActive (true);
 			break;
 		case 2:
-			pickedRedGui.SetActive(true);
-			pickedColourGui.GetComponent<Image> ().color = new Color (255, 0, 0, 255);
+			pickedRedGui.SetActive (true);
+			pointerRed.SetActive (true);
 			break;
 		case 3:
 			pickedBlueGui.SetActive(true);
-			pickedColourGui.GetComponent<Image> ().color = new Color (0, 0, 255, 255);
+			pointerBlue.SetActive (true);
 			break;
 		default:
 			break;
@@ -346,8 +365,33 @@ public class PlayerController : MonoBehaviour {
 		resetTiles();
 		underWaterGui.SetActive(false);
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Collectable")) {
-			Debug.Log ("123");
-			go.SetActive (true);
+			go.GetComponent<AbstractPickUp> ().reset ();
 		}
+	}
+
+	void fadeCrouch() {
+		bool done = false;
+		float currentsize = transform.localScale.y;
+		float newsize = currentsize - ((scaleFactorStanding - scaleFactorCrouch) / scaleTime) * scaleTimeSteps;
+		if (newsize <= scaleFactorCrouch) {
+			newsize = scaleFactorCrouch;
+			done = true;
+		}
+		transform.localScale = new Vector3 (transform.localScale.x, newsize, transform.localScale.z);
+		if (done == true)
+			CancelInvoke ("fadeCrouch");
+	}
+
+	void fadeStanding() {
+		bool done = false;
+		float currentsize = transform.localScale.y;
+		float newsize = currentsize + ((scaleFactorStanding - scaleFactorCrouch) / scaleTime) * scaleTimeSteps;
+		if (newsize >= scaleFactorStanding) {
+			newsize = scaleFactorStanding;
+			done = true;
+		}
+		transform.localScale = new Vector3 (transform.localScale.x, newsize, transform.localScale.z);
+		if (done == true)
+			CancelInvoke ("fadeStanding");
 	}
 }
