@@ -114,6 +114,11 @@ public class PlayerController : MonoBehaviour {
 
 	void resetPlayer() {
 		transform.position = resetPos.transform.position;
+		jumpers = 0;
+		shrinkers = 0;
+		invisibility = 0;
+		jumpText.text = "0";
+		shrinkText.text = "0";
 	}
 
 	void resetTiles() {
@@ -156,17 +161,13 @@ public class PlayerController : MonoBehaviour {
 			deadCounter++;
 			if (deadCounter > 120) {
 				deadCounter = 0;
-				resetPlayer ();
-				resetTiles ();
-				underWaterGui.SetActive(false);
+				die ();
 			}
 		}
 
 		// Resets the player when he press the key "r"
 		if (reset == 1f) {
-			resetPlayer();
-			resetTiles();
-			underWaterGui.SetActive(false);
+			die ();
 		}
 			
 		CollisionFlags flags;
@@ -277,7 +278,7 @@ public class PlayerController : MonoBehaviour {
 		currentLevel += 1;
 		currentWorld = "Level" + currentLevel;
 		resetPos = GameObject.Find(currentWorld + "/StartPoint");
-		resetPlayer ();
+		die ();
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
@@ -338,5 +339,15 @@ public class PlayerController : MonoBehaviour {
 	public void addGreenLoad(int amount) {
 		shrinkers += (short)amount;
 		shrinkText.text = shrinkers + "";
+	}
+
+	void die() {
+		resetPlayer();
+		resetTiles();
+		underWaterGui.SetActive(false);
+		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Collectable")) {
+			Debug.Log ("123");
+			go.SetActive (true);
+		}
 	}
 }
