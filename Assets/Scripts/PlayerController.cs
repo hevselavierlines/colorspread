@@ -249,13 +249,13 @@ public class PlayerController : MonoBehaviour {
 			Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
 
 			if (selectionMode == 1) {
-				if (jumpers > 0) {
+				if (jumpers > 0 && !oldMaterial.material.color.Equals(colorSet1.color)) {
 					oldMaterial.material = colorSet1;
 					jumpers--;
 					jumpText.text = jumpers + "";
 				}
 			} else if (selectionMode == 2) {
-				if (shrinkers > 0) {
+				if (shrinkers > 0 && !oldMaterial.material.color.Equals(colorSet2.color)) {
 					oldMaterial.material = colorSet2;
 					shrinkers--;
 					shrinkText.text = shrinkers + "";
