@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Pickups\GreenPickUp.cs" />
      <Compile Include="Assets\Scripts\Pickups\RedPickUp.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\PlayerInvisibiltyCheck.cs" />
      <Compile Include="Assets\Scripts\Target.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
      <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
