@@ -46,7 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BotFloor.cs" />
      <Compile Include="Assets\Scripts\Pickups\AbstractPickUp.cs" />
+     <Compile Include="Assets\Scripts\Pickups\BluePickUp.cs" />
      <Compile Include="Assets\Scripts\Pickups\GreenPickUp.cs" />
      <Compile Include="Assets\Scripts\Pickups\RedPickUp.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />

@@ -1,8 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\BotFloor.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="252" Column="78" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="427" Column="9" />
+      <File FileName="Assets\Scripts\Target.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Pickups\BluePickUp.cs" Line="5" Column="34" />
+      <File FileName="Assets\Scripts\Pickups\GreenPickUp.cs" Line="7" Column="1" />
+      <File FileName="Assets\Scripts\BotFloor.cs" Line="11" Column="16" />
+      <File FileName="Assets\Scripts\Pickups\AbstractPickUp.cs" Line="6" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

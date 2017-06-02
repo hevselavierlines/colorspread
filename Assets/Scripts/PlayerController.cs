@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour {
 	public Material colorSet1;
 	public Material selection2;
 	public Material colorSet2;
+	public Material selection3;
+	public Material colorSet3;
 	public float raycastLength;
 	private Collider oldSelection;
 	private short startJumping = 0;
@@ -32,11 +34,13 @@ public class PlayerController : MonoBehaviour {
 	private short shrinkers = 0;
 	private short invisibility = 0;
 
-	private int selectionMode = 2;
+	private int selectionMode = 3;
 	public Text jumpText;
 	public Image jumpIcon;
 	public Text shrinkText;
 	public Image shrinkIcon;
+	public Text invisibilityText;
+	public Image invisibilityIcon;
 	private bool crouch = false;
 	public GameObject underWaterGui;
 	public GameObject pickedRedGui;
@@ -84,7 +88,27 @@ public class PlayerController : MonoBehaviour {
 			color = shrinkIcon.color;
 			color.a = 1.0f;
 			shrinkIcon.color = color;
+
+			color = invisibilityIcon.color;
+			color.a = 0.2f;
+			invisibilityIcon.color = color;
+
 		} else if (selectionMode == 2) {
+			selectionMode = 3;
+
+			Color color = jumpIcon.color;
+			color.a = 0.2f;
+			jumpIcon.color = color;
+
+			color = shrinkIcon.color;
+			color.a = 0.2f;
+			shrinkIcon.color = color;
+
+			color = invisibilityIcon.color;
+			color.a = 1.0f;
+			invisibilityIcon.color = color;
+
+		} else if (selectionMode == 3) {
 			selectionMode = 1;
 
 			Color color = jumpIcon.color;
@@ -94,6 +118,10 @@ public class PlayerController : MonoBehaviour {
 			color = shrinkIcon.color;
 			color.a = 0.2f;
 			shrinkIcon.color = color;
+
+			color = invisibilityIcon.color;
+			color.a = 0.2f;
+			invisibilityIcon.color = color;
 		}
 
 		if (oldSelection != null) {
@@ -114,6 +142,7 @@ public class PlayerController : MonoBehaviour {
 		resetPos = GameObject.Find(currentWorld + "/StartPoint");
 		jumpText.text = jumpers + "";
 		shrinkText.text = shrinkers + "";
+		invisibilityText.text = invisibility + "";
 
 
 		changeSelection ();
@@ -127,6 +156,7 @@ public class PlayerController : MonoBehaviour {
 		invisibility = 0;
 		jumpText.text = "0";
 		shrinkText.text = "0";
+		invisibilityText.text = "0";
 	}
 
 	void resetTiles() {
@@ -235,6 +265,29 @@ public class PlayerController : MonoBehaviour {
 					}
 					oldSelection = hit.collider;
 				}
+			} else if (selectionMode == 3 && invisibility > 0) {
+				if (hit.collider.tag == "Floor") { 
+					if (oldSelection != null) {
+						if (hit.collider.name != oldSelection.name) {
+							Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
+							Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
+							bool oldContains = oldMaterial.material.name.Contains ("active");
+							bool newContains = newMaterial.material.name.Contains ("active");
+							if (!oldContains && !newContains) {
+								oldMaterial.material = original;
+								newMaterial.material = selection3;
+							} else {
+								if (newContains && !oldContains) {
+									oldMaterial.material = original;
+								}
+								if (oldContains && !newContains) {
+									newMaterial.material = selection3;
+								}
+							}
+						}
+					}
+					oldSelection = hit.collider;
+				}
 			}
 		} else {
 			if (oldSelection != null) {
@@ -259,6 +312,12 @@ public class PlayerController : MonoBehaviour {
 					oldMaterial.material = colorSet2;
 					shrinkers--;
 					shrinkText.text = shrinkers + "";
+				}
+			} else if (selectionMode == 3) {
+				if (invisibility > 0 && !oldMaterial.material.color.Equals(colorSet3.color)) {
+					oldMaterial.material = colorSet3;
+					invisibility--;
+					invisibilityText.text = invisibility + "";
 				}
 			}
 		}
@@ -330,11 +389,11 @@ public class PlayerController : MonoBehaviour {
 			pickedGreenGui.SetActive(true);
 			pointerGreen.SetActive (true);
 			break;
-		case 2:
+		case 3:
 			pickedRedGui.SetActive (true);
 			pointerRed.SetActive (true);
 			break;
-		case 3:
+		case 2:
 			pickedBlueGui.SetActive(true);
 			pointerBlue.SetActive (true);
 			break;
@@ -360,7 +419,12 @@ public class PlayerController : MonoBehaviour {
 		shrinkText.text = shrinkers + "";
 	}
 
-	void die() {
+	public void addBlueLoad(int amount) {
+		invisibility += (short)amount;
+		invisibilityText.text = invisibility + "";
+	}
+
+	public void die() {
 		resetPlayer();
 		resetTiles();
 		underWaterGui.SetActive(false);
