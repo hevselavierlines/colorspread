@@ -264,6 +264,8 @@ public class PlayerController : MonoBehaviour {
 						}
 					}
 					oldSelection = hit.collider;
+				} else {
+					print (hit.collider.tag);
 				}
 			} else if (selectionMode == 3 && invisibility > 0) {
 				if (hit.collider.tag == "Floor") { 
