@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour {
 		if (transform.position.y < 0) {
 			underWaterGui.SetActive(true);
 			deadCounter++;
-			if (deadCounter > 20) {
+			if (deadCounter > 12) {
 				deadCounter = 0;
 				die ();
 			}
