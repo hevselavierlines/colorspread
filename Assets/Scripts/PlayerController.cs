@@ -350,7 +350,15 @@ public class PlayerController : MonoBehaviour {
 		currentLevel += 1;
 		currentWorld = "Level" + currentLevel;
 		resetPos = GameObject.Find(currentWorld + "/StartPoint");
-		die ();
+		if (currentLevel >= 6) {
+			#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+			#else
+			Application.Quit ();
+			#endif
+		} else {
+			die ();
+		}
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
