@@ -139,6 +139,8 @@ public class PlayerController : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 
+		PlayerPrefs.SetInt ("CameraMovementActive", 1);
+
 		resetPos = GameObject.Find(currentWorld + "/StartPoint");
 		jumpText.text = jumpers + "";
 		shrinkText.text = shrinkers + "";
@@ -171,177 +173,179 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate (0, Input.GetAxis ("Mouse X") * mouseSensivity, 0);
-		verticalAngle -= Input.GetAxis ("Mouse Y") * mouseSensivity;
-		verticalAngle = Mathf.Clamp (verticalAngle, gravityRotationStart - maxVerticalAngle, gravityRotationStart + maxVerticalAngle);
-		Quaternion localRotation = Quaternion.Euler (verticalAngle, 0, 0);
-		mainCamera.transform.localRotation = localRotation;
+		if(PlayerPrefs.GetInt("CameraMovementActive") == 1) {
+			transform.Rotate (0, Input.GetAxis ("Mouse X") * mouseSensivity, 0);
+			verticalAngle -= Input.GetAxis ("Mouse Y") * mouseSensivity;
+			verticalAngle = Mathf.Clamp (verticalAngle, gravityRotationStart - maxVerticalAngle, gravityRotationStart + maxVerticalAngle);
+			Quaternion localRotation = Quaternion.Euler (verticalAngle, 0, 0);
+			mainCamera.transform.localRotation = localRotation;
 
-		float horizontalMovement = Input.GetAxis ("Horizontal") * movementSpeed;
-		float verticalMovement = Input.GetAxis ("Vertical") * movementSpeed;
-		float reset = Input.GetAxis ("Reset");
+			float horizontalMovement = Input.GetAxis ("Horizontal") * movementSpeed;
+			float verticalMovement = Input.GetAxis ("Vertical") * movementSpeed;
+			float reset = Input.GetAxis ("Reset");
 
-		if (grounded) {
-			fallSpeed = 0;
-			if (startJumping == 1) {
-				fallSpeed = jumpSpeed;
-				startJumping = 0;
-			} else if (startJumping == 2) {
-				fallSpeed = slowJumpSpeed;
-				startJumping = 0;
+			if (grounded) {
+				fallSpeed = 0;
+				if (startJumping == 1) {
+					fallSpeed = jumpSpeed;
+					startJumping = 0;
+				} else if (startJumping == 2) {
+					fallSpeed = slowJumpSpeed;
+					startJumping = 0;
+				}
+			} else {
+				fallSpeed += gravity * Time.deltaTime;
 			}
-		} else {
-			fallSpeed += gravity * Time.deltaTime;
-		}
 
-		if (transform.position.y < 0) {
-			underWaterGui.SetActive(true);
-			deadCounter++;
-			if (deadCounter > 12) {
-				deadCounter = 0;
+			if (transform.position.y < 0) {
+				underWaterGui.SetActive(true);
+				deadCounter++;
+				if (deadCounter > 12) {
+					deadCounter = 0;
+					die ();
+				}
+			}
+
+			// Resets the player when he press the key "r"
+			if (reset == 1f) {
 				die ();
 			}
-		}
+				
+			CollisionFlags flags;
+			Vector3 motion = new Vector3 (horizontalMovement, fallSpeed, verticalMovement);
 
-		// Resets the player when he press the key "r"
-		if (reset == 1f) {
-			die ();
-		}
-			
-		CollisionFlags flags;
-		Vector3 motion = new Vector3 (horizontalMovement, fallSpeed, verticalMovement);
+			motion = Quaternion.Euler (0, 0, 0) * motion;
+			motion = transform.TransformDirection (motion);
 
-		motion = Quaternion.Euler (0, 0, 0) * motion;
-		motion = transform.TransformDirection (motion);
+			flags = controller.Move (motion * Time.deltaTime);
 
-		flags = controller.Move (motion * Time.deltaTime);
-
-		Vector3 fwd = transform.TransformDirection(localRotation * Vector3.forward);
-		RaycastHit hit;
-		if (Physics.Raycast (mainCamera.transform.position, fwd, out hit, raycastLength)) {
-			if (selectionMode == 1 && jumpers > 0) {
-				if (hit.collider.tag == "Floor") { 
-					if (oldSelection != null) {
-						if (hit.collider.name != oldSelection.name) {
-							Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
-							Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
-							bool oldContains = oldMaterial.material.name.Contains ("active");
-							bool newContains = newMaterial.material.name.Contains ("active");
-							if (!oldContains && !newContains) {
-								oldMaterial.material = original;
-								newMaterial.material = selection1;
-							} else {
-								if (newContains && !oldContains) {
+			Vector3 fwd = transform.TransformDirection(localRotation * Vector3.forward);
+			RaycastHit hit;
+			if (Physics.Raycast (mainCamera.transform.position, fwd, out hit, raycastLength)) {
+				if (selectionMode == 1 && jumpers > 0) {
+					if (hit.collider.tag == "Floor") { 
+						if (oldSelection != null) {
+							if (hit.collider.name != oldSelection.name) {
+								Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
+								Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
+								bool oldContains = oldMaterial.material.name.Contains ("active");
+								bool newContains = newMaterial.material.name.Contains ("active");
+								if (!oldContains && !newContains) {
 									oldMaterial.material = original;
-								}
-								if (oldContains && !newContains) {
 									newMaterial.material = selection1;
+								} else {
+									if (newContains && !oldContains) {
+										oldMaterial.material = original;
+									}
+									if (oldContains && !newContains) {
+										newMaterial.material = selection1;
+									}
 								}
 							}
 						}
+						oldSelection = hit.collider;
 					}
-					oldSelection = hit.collider;
-				}
-			} else if (selectionMode == 2 && shrinkers > 0) {
-				if (hit.collider.tag == "Floor") { 
-					if (oldSelection != null) {
-						if (hit.collider.name != oldSelection.name) {
-							Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
-							Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
-							bool oldContains = oldMaterial.material.name.Contains ("active");
-							bool newContains = newMaterial.material.name.Contains ("active");
-							if (!oldContains && !newContains) {
-								oldMaterial.material = original;
-								newMaterial.material = selection2;
-							} else {
-								if (newContains && !oldContains) {
+				} else if (selectionMode == 2 && shrinkers > 0) {
+					if (hit.collider.tag == "Floor") { 
+						if (oldSelection != null) {
+							if (hit.collider.name != oldSelection.name) {
+								Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
+								Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
+								bool oldContains = oldMaterial.material.name.Contains ("active");
+								bool newContains = newMaterial.material.name.Contains ("active");
+								if (!oldContains && !newContains) {
 									oldMaterial.material = original;
-								}
-								if (oldContains && !newContains) {
 									newMaterial.material = selection2;
+								} else {
+									if (newContains && !oldContains) {
+										oldMaterial.material = original;
+									}
+									if (oldContains && !newContains) {
+										newMaterial.material = selection2;
+									}
 								}
 							}
 						}
+						oldSelection = hit.collider;
 					}
-					oldSelection = hit.collider;
-				}
-			} else if (selectionMode == 3 && invisibility > 0) {
-				if (hit.collider.tag == "Floor") { 
-					if (oldSelection != null) {
-						if (hit.collider.name != oldSelection.name) {
-							Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
-							Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
-							bool oldContains = oldMaterial.material.name.Contains ("active");
-							bool newContains = newMaterial.material.name.Contains ("active");
-							if (!oldContains && !newContains) {
-								oldMaterial.material = original;
-								newMaterial.material = selection3;
-							} else {
-								if (newContains && !oldContains) {
+				} else if (selectionMode == 3 && invisibility > 0) {
+					if (hit.collider.tag == "Floor") { 
+						if (oldSelection != null) {
+							if (hit.collider.name != oldSelection.name) {
+								Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
+								Renderer newMaterial = hit.collider.GetComponent<Renderer> ();
+								bool oldContains = oldMaterial.material.name.Contains ("active");
+								bool newContains = newMaterial.material.name.Contains ("active");
+								if (!oldContains && !newContains) {
 									oldMaterial.material = original;
-								}
-								if (oldContains && !newContains) {
 									newMaterial.material = selection3;
+								} else {
+									if (newContains && !oldContains) {
+										oldMaterial.material = original;
+									}
+									if (oldContains && !newContains) {
+										newMaterial.material = selection3;
+									}
 								}
 							}
 						}
+						oldSelection = hit.collider;
 					}
-					oldSelection = hit.collider;
+				}
+			} else {
+				if (oldSelection != null) {
+					Renderer oldMaterial = oldSelection.GetComponent<Renderer>();
+					if (!oldMaterial.material.name.Contains ("active")) {
+						oldMaterial.material = original;
+					}
 				}
 			}
-		} else {
-			if (oldSelection != null) {
-				Renderer oldMaterial = oldSelection.GetComponent<Renderer>();
-				if (!oldMaterial.material.name.Contains ("active")) {
-					oldMaterial.material = original;
+
+			if (Input.GetMouseButtonDown (0)) {
+				Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
+
+				if (selectionMode == 1) {
+					if (jumpers > 0 && !oldMaterial.material.color.Equals(colorSet1.color)) {
+						oldMaterial.material = colorSet1;
+						jumpers--;
+						jumpText.text = jumpers + "";
+					}
+				} else if (selectionMode == 2) {
+					if (shrinkers > 0 && !oldMaterial.material.color.Equals(colorSet2.color)) {
+						oldMaterial.material = colorSet2;
+						shrinkers--;
+						shrinkText.text = shrinkers + "";
+					}
+				} else if (selectionMode == 3) {
+					if (invisibility > 0 && !oldMaterial.material.color.Equals(colorSet3.color)) {
+						oldMaterial.material = colorSet3;
+						invisibility--;
+						invisibilityText.text = invisibility + "";
+					}
 				}
 			}
-		}
 
-		if (Input.GetMouseButtonDown (0)) {
-			Renderer oldMaterial = oldSelection.GetComponent<Renderer> ();
-
-			if (selectionMode == 1) {
-				if (jumpers > 0 && !oldMaterial.material.color.Equals(colorSet1.color)) {
-					oldMaterial.material = colorSet1;
-					jumpers--;
-					jumpText.text = jumpers + "";
-				}
-			} else if (selectionMode == 2) {
-				if (shrinkers > 0 && !oldMaterial.material.color.Equals(colorSet2.color)) {
-					oldMaterial.material = colorSet2;
-					shrinkers--;
-					shrinkText.text = shrinkers + "";
-				}
-			} else if (selectionMode == 3) {
-				if (invisibility > 0 && !oldMaterial.material.color.Equals(colorSet3.color)) {
-					oldMaterial.material = colorSet3;
-					invisibility--;
-					invisibilityText.text = invisibility + "";
-				}
+			if (Input.GetKeyUp ("c")) {
+				changeSelection ();
 			}
-		}
 
-		if (Input.GetKeyUp ("c")) {
-			changeSelection ();
-		}
-
-		grounded = ((flags & CollisionFlags.Below) != 0);
-		if (Input.GetKeyDown ("space")) {
-			startJumping = 2;
-		}
-		if (Input.GetKeyUp ("backspace")) {
-			resetPlayer ();
-		}
-		// Fade from original size to greeen colour size and vice versa
-		if (crouch) {
-			// check if already fully crouched
-			if(transform.localScale.y <= scaleFactorCrouch) return;
-			InvokeRepeating ("fadeCrouch", 0.0f, scaleTimeSteps);
-		} else {
-			// check if already full height
-			if(transform.localScale.y >= scaleFactorStanding) return;
-			InvokeRepeating ("fadeStanding", 0.0f, scaleTimeSteps);
+			grounded = ((flags & CollisionFlags.Below) != 0);
+			if (Input.GetKeyDown ("space")) {
+				startJumping = 2;
+			}
+			if (Input.GetKeyUp ("backspace")) {
+				resetPlayer ();
+			}
+			// Fade from original size to greeen colour size and vice versa
+			if (crouch) {
+				// check if already fully crouched
+				if(transform.localScale.y <= scaleFactorCrouch) return;
+				InvokeRepeating ("fadeCrouch", 0.0f, scaleTimeSteps);
+			} else {
+				// check if already full height
+				if(transform.localScale.y >= scaleFactorStanding) return;
+				InvokeRepeating ("fadeStanding", 0.0f, scaleTimeSteps);
+			}
 		}
 
 	}
