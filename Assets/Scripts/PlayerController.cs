@@ -165,8 +165,10 @@ public class PlayerController : MonoBehaviour {
 		GameObject level = GameObject.Find (currentWorld);
 		Renderer[] renderer = level.GetComponentsInChildren<Renderer> ();
 		foreach (Renderer rend in renderer) {
-			if(rend.material.name.Contains("tile")) {
-				rend.material = original;
+			if (rend.tag == "Floor") {
+				if (rend.material.name.Contains ("tile")) {
+					rend.material = original;
+				}
 			}
 		}
 	}
