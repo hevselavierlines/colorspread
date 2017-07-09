@@ -445,6 +445,9 @@ public class PlayerController : MonoBehaviour {
 		foreach(GameObject go in GameObject.FindGameObjectsWithTag("Collectable")) {
 			go.GetComponent<AbstractPickUp> ().reset ();
 		}
+		foreach (GameObject door in GameObject.FindGameObjectsWithTag("Door")) {
+			door.GetComponent<openDoor> ().reset();
+		}
 	}
 
 	void fadeCrouch() {

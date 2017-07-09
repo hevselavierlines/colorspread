@@ -21,4 +21,9 @@ public class openDoor : MonoBehaviour {
 	void OnTriggerEnter () {
 		rotation = -90;
 	}
+
+	public void reset () {
+		rotation = -91;
+		door.transform.eulerAngles = new Vector3 (0, -90, 0);
+	}
 }
