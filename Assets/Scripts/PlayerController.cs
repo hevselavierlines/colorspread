@@ -356,7 +356,7 @@ public class PlayerController : MonoBehaviour {
 		currentLevel += 1;
 		currentWorld = "Level" + currentLevel;
 		resetPos = GameObject.Find(currentWorld + "/StartPoint");
-		if (currentLevel >= 6) {
+		if (currentLevel >= 7) {
 			#if UNITY_EDITOR
 			UnityEditor.EditorApplication.isPlaying = false;
 			#else
