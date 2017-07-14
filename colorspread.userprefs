@@ -1,18 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/BotFloor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerInvisibiltyCheck.cs">
     <Files>
-      <File FileName="Assets/Scripts/BotFloor.cs" Line="10" Column="68" />
-      <File FileName="Assets/Scripts/Target.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="151" Column="18" />
-      <File FileName="Assets/Editor/CrossPlatformInput/CrossPlatformInputInitialize.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/DisableCanvas.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/PlayerInvisibiltyCheck.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/openDoor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\BotFloor.cs" Line="24" Column="1" />
+      <File FileName="Assets\Scripts\Target.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="151" Column="18" />
+      <File FileName="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DisableCanvas.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerInvisibiltyCheck.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\openDoor.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <RunToCursorBreakpoint file="P:\Git\colorspread\Assets\Scripts\BotFloor.cs" line="12" column="68" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
